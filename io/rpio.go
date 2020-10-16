@@ -91,7 +91,7 @@ func (r *rPIO) RegisterEdgeDetection(pin rpio.Pin, edge rpio.Edge, callback func
 	r.registeredPins[pin] = true
 
 	// Setup detection
-	rpio.DetectEdge(pin, edge)
+	pin.Detect(edge)
 
 	// Register with poller
 	r.poller.newPin <- pinRegistration{
@@ -120,7 +120,7 @@ func (r *rPIO) RemoveEdgeDetectionRegistration(pin rpio.Pin) error {
 	delete(r.registeredPins, pin)
 
 	// Clear detection
-	rpio.DetectEdge(pin, rpio.NoEdge)
+	pin.Detect(rpio.NoEdge)
 
 	// Remove registration with poller
 	r.poller.removePin <- pin
