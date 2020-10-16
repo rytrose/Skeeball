@@ -13,8 +13,9 @@ func main() {
 	io.RPIOClient.Start()
 	defer io.RPIOClient.Stop()
 
-	pin := rpio.Pin(4)
+	pin := rpio.Pin(27)
 	pin.Input()
+	pin.PullUp()
 
 	callback := func(edge rpio.Edge) {
 		fmt.Println(fmt.Sprintf("edge detected: %v", edge))
