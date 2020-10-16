@@ -163,6 +163,7 @@ pollLoop:
 	for {
 		select {
 		case <-p.ticker.C:
+			fmt.Println("poller: polling")
 			// Read pins and handle edge detection
 			for pin, registration := range p.registeredPins {
 				if pin.EdgeDetected() {
@@ -170,12 +171,15 @@ pollLoop:
 				}
 			}
 		case newRegistration := <-p.newPin:
+			fmt.Println("poller: new pin")
 			// Add pin registration to pins to poll
 			p.registeredPins[newRegistration.pin] = newRegistration
 		case registrationToRemove := <-p.removePin:
+			fmt.Println("poller: removing pin")
 			// Remove pin registration from pins to poll
 			delete(p.registeredPins, registrationToRemove)
 		case newPollFreq := <-p.newPollFreq:
+			fmt.Println("poller: updating polling frequency")
 			// Update the ticker polling frequency
 			p.ticker.Reset(newPollFreq)
 		case <-p.stop:
