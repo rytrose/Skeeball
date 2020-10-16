@@ -16,6 +16,7 @@ const DefaultPollFreq = 100 * time.Millisecond
 func init() {
 	// Instatiate RPIO client singleton
 	RPIOClient = &rPIO{
+		open: false,
 		poller: &rpioPoller{
 			ticker:         time.NewTicker(DefaultPollFreq),
 			registeredPins: make(map[rpio.Pin]pinRegistration),
@@ -24,6 +25,7 @@ func init() {
 			newPollFreq:    make(chan time.Duration),
 			stop:           make(chan struct{}),
 		},
+		registeredPins: make(map[rpio.Pin]bool),
 	}
 }
 
