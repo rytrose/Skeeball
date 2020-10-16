@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"os/signal"
+	"time"
 
 	"github.com/rytrose/skeeball/io"
 	"github.com/stianeikeland/go-rpio"
@@ -23,7 +22,6 @@ func main() {
 
 	io.RPIOClient.RegisterEdgeDetection(pin, rpio.AnyEdge, callback)
 
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	<-c
+	<-time.After(10 * time.Second)
+	fmt.Println("goodbye!")
 }

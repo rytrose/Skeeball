@@ -85,6 +85,8 @@ func (r *rPIO) RegisterEdgeDetection(pin rpio.Pin, edge rpio.Edge, callback func
 		return fmt.Errorf("pin is already registered, call RemoveEdgeDetectionRegistration before attempting a new registration")
 	}
 
+	fmt.Println(fmt.Sprintf("registering pin %d, edge %v", pin, edge))
+
 	// Only one registration per pin
 	r.registeredPins[pin] = true
 
@@ -111,6 +113,8 @@ func (r *rPIO) RemoveEdgeDetectionRegistration(pin rpio.Pin) error {
 	if !exists {
 		return fmt.Errorf("pin is not yet registered")
 	}
+
+	fmt.Println(fmt.Sprintf("removing registration for pin %d", pin))
 
 	// Remove pin registration
 	delete(r.registeredPins, pin)
