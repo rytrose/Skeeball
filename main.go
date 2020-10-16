@@ -18,7 +18,7 @@ func main() {
 	pin.PullUp()
 
 	callback := func(edge rpio.Edge) {
-		fmt.Println(fmt.Sprintf("edge detected: %v", edge))
+		fmt.Println(fmt.Sprintf("edge detected: %v (%v)", edge, pin.Read()))
 	}
 
 	io.RPIOClient.RegisterEdgeDetection(pin, rpio.AnyEdge, callback)
