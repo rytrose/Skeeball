@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "SSH FS - raspberrypi.zero.w.skeeball",
+			"uri": "ssh://raspberrypi.zero.w.skeeball/"
+		},
+		{
+			"path": "."
+		}
+	]
+}
