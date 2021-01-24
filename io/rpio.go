@@ -16,7 +16,8 @@ const DefaultPollFreq = 100 * time.Millisecond
 func init() {
 	// Instatiate RPIO client singleton
 	RPIOClient = &rPIO{
-		open: false,
+		open:    false,
+		polling: false,
 		poller: &rpioPoller{
 			ticker:         time.NewTicker(DefaultPollFreq),
 			registeredPins: make(map[rpio.Pin]pinRegistration),
@@ -32,6 +33,7 @@ func init() {
 // rPIO is a wrapper interfacing with Raspberry Pi GPIO.
 type rPIO struct {
 	open           bool              // open maintains state of GPIO.
+	polling        bool              // polling maintains state of polling.
 	poller         *rpioPoller       // poller manages polling pins for edge detection.
 	registeredPins map[rpio.Pin]bool // registeredPins keeps track of what pins are registered.
 }
@@ -49,10 +51,33 @@ func (r *rPIO) Start() {
 		panic(fmt.Sprintf("unable to open GPIO: %s", err))
 	}
 
+	r.open = true
+}
+
+// Poll scans pin states and exercises callbacks when registered pin events are detected.
+func (r *rPIO) Poll() {
+	if r.polling {
+		// Only poll once
+		return
+	}
+
 	// Start polling
 	go r.poller.poll()
 
-	r.open = true
+	r.polling = true
+}
+
+// StopPolling stops scanning pins for pin events.
+func (r *rPIO) StopPolling() {
+	if !r.polling {
+		// Don't attempt to stop polling if not started
+		return
+	}
+
+	// Signal polling goroutine to stop
+	r.poller.stop <- struct{}{}
+
+	r.polling = false
 }
 
 // Stop closes GPIO and stops polling.
@@ -63,7 +88,9 @@ func (r *rPIO) Stop() {
 	}
 
 	// Stop polling
-	r.poller.stop <- struct{}{}
+	if r.polling {
+		r.StopPolling()
+	}
 
 	// Close GPIO
 	err := rpio.Close()
@@ -75,6 +102,7 @@ func (r *rPIO) Stop() {
 }
 
 // RegisterEdgeDetection registers a callback for a detected edge on a specified pin.
+// Requires rPIO.Poll() to be called in order to detect events.
 func (r *rPIO) RegisterEdgeDetection(pin rpio.Pin, edge rpio.Edge, callback func(rpio.Edge)) error {
 	if !r.open {
 		return fmt.Errorf("GPIO is not yet open")
