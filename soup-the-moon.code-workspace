@@ -3,5 +3,19 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"settings": {
+		"sync-rsync.sites": [
+			{
+				"localPath": "./",
+				"remotePath": "pi@rytrose-pi-zero-w.local:/home/pi/projects/soup-the-moon/"
+			}
+		],
+		"sync-rsync.exclude": [
+			".git/",
+			"vendor/",
+			".DS_Store"
+		],
+		"sync-rsync.onSave": true
+	}
 }
