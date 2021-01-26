@@ -13,7 +13,8 @@ const downButtonPin = 4
 // downPin is the pin for the down button.
 var downPin rpio.Pin
 
-func init() {
+// InitDown configures the raspberry pi GPIO pin.
+func InitDown() {
 	// Set up down button pin
 	if util.IsRasPi() {
 		downPin = rpio.Pin(downButtonPin)

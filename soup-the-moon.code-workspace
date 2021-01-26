@@ -8,6 +8,10 @@
 		"sync-rsync.sites": [
 			{
 				"localPath": "./",
+				"remotePath": "pi@rytrose-pi-4.local:/home/pi/projects/soup-the-moon/"
+			},
+			{
+				"localPath": "./",
 				"remotePath": "pi@rytrose-pi-zero-w.local:/home/pi/projects/soup-the-moon/"
 			}
 		],
@@ -15,7 +19,6 @@
 			".git/",
 			"vendor/",
 			".DS_Store"
-		],
-		"sync-rsync.onSave": true
+		]
 	}
 }

@@ -1,11 +1,13 @@
 package game
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/rytrose/soup-the-moon/game/input"
 	"github.com/rytrose/soup-the-moon/game/screens"
 	"github.com/rytrose/soup-the-moon/game/util"
@@ -61,6 +63,8 @@ func (g *Game) Update() error {
 	switch g.screen {
 	case screens.ScreenMenu:
 		nextScreen = screens.UpdateMenu()
+	case screens.ScreenInitials:
+		nextScreen = screens.UpdateInitials()
 	}
 
 	// Set the next screen
@@ -71,7 +75,15 @@ func (g *Game) Update() error {
 
 // Draw draws a frame.
 func (g *Game) Draw(screen *ebiten.Image) {
-	screens.DrawMenu(g.c, g.w, g.h, screen)
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f", ebiten.CurrentTPS()))
+
+	// Draw appropriate screen
+	switch g.screen {
+	case screens.ScreenMenu:
+		screens.DrawMenu(g.c, g.w, g.h, screen)
+	case screens.ScreenInitials:
+		screens.DrawInitials(g.c, g.w, g.h, screen)
+	}
 }
 
 // Layout determines the game's layout.

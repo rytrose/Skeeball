@@ -13,7 +13,8 @@ const upButtonPin = 3
 // upPin is the pin for the up button.
 var upPin rpio.Pin
 
-func init() {
+// InitUp configures the raspberry pi GPIO pin.
+func InitUp() {
 	// Set up up button pin
 	if util.IsRasPi() {
 		upPin = rpio.Pin(upButtonPin)
