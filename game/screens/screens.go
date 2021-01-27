@@ -7,4 +7,5 @@ type ScreenID int
 const (
 	ScreenMenu ScreenID = iota
 	ScreenInitials
+	ScreenScoring
 )

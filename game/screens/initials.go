@@ -39,8 +39,7 @@ func UpdateInitials() ScreenID {
 
 	if input.Enter() {
 		if theInitialsState.selected == len(theInitialsState.initials)-1 {
-			// TODO: advance to scoring screen
-			return ScreenMenu
+			return ScreenScoring
 		}
 
 		// Move cursor forward
@@ -71,10 +70,11 @@ func DrawInitials(count int, w, h int, screen *ebiten.Image) {
 // drawPrompt draws the input prompt to the top of the screen.
 func drawPrompt(w int, screen *ebiten.Image) {
 	prompt := "Enter your initials..."
+	promptY := 4 * 16
 
 	// Draw the title centered
 	promptX := (w - len(prompt)*16) / 2
-	text.Draw(screen, prompt, fonts.ArcadeFont16, promptX, 4*16, color.White)
+	text.Draw(screen, prompt, fonts.ArcadeFont16, promptX, promptY, color.White)
 }
 
 // drawInitials draws the initials selectors.
@@ -98,5 +98,14 @@ func drawInitials(w int, screen *ebiten.Image) {
 			text.Draw(screen, "/\\", fonts.ArcadeFont16, initialsX[i]-8, topCursorY, color.White)
 			text.Draw(screen, "\\/", fonts.ArcadeFont16, initialsX[i]-8, bottomCursorY, color.White)
 		}
+	}
+}
+
+// getInitials retrieves the initials string chosen.
+func getInitials() []string {
+	return []string{
+		tokens[theInitialsState.initials[0]],
+		tokens[theInitialsState.initials[1]],
+		tokens[theInitialsState.initials[2]],
 	}
 }

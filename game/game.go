@@ -65,6 +65,8 @@ func (g *Game) Update() error {
 		nextScreen = screens.UpdateMenu()
 	case screens.ScreenInitials:
 		nextScreen = screens.UpdateInitials()
+	case screens.ScreenScoring:
+		nextScreen = screens.UpdateScoring()
 	}
 
 	// Set the next screen
@@ -83,6 +85,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		screens.DrawMenu(g.c, g.w, g.h, screen)
 	case screens.ScreenInitials:
 		screens.DrawInitials(g.c, g.w, g.h, screen)
+	case screens.ScreenScoring:
+		screens.DrawScoring(g.c, g.w, g.h, screen)
 	}
 }
 
