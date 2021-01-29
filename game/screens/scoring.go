@@ -13,7 +13,8 @@ import (
 
 // scoringState maintains all state needed for the scoring screen.
 type scoringState struct {
-	score int
+	score          int
+	confirmingBack bool
 }
 
 // theScoringState is the state of the scoring screen.
@@ -22,11 +23,27 @@ var theScoringState = &scoringState{}
 // UpdateScoring updates the scoring screen state before every frame.
 func UpdateScoring() ScreenID {
 	if input.Back() {
-		// Reset score
-		theScoringState.score = 0
+		if theScoringState.confirmingBack {
+			// Reset score
+			theScoringState.score = 0
 
-		// TODO: consider a back confirmation page
-		return ScreenInitials
+			// Clear confirmation flag
+			theScoringState.confirmingBack = false
+
+			return ScreenMenu
+		}
+
+		// Set confirmation flag
+		theScoringState.confirmingBack = true
+
+		return ScreenScoring
+	}
+
+	if input.Enter() {
+		if theScoringState.confirmingBack {
+			// Clear confirmation flag
+			theScoringState.confirmingBack = false
+		}
 	}
 
 	// Update score
@@ -56,6 +73,10 @@ func UpdateScoring() ScreenID {
 func DrawScoring(count int, w, h int, screen *ebiten.Image) {
 	drawPlayerInitials(screen)
 	drawScore(w, screen)
+
+	if theScoringState.confirmingBack {
+		drawConfirmBack(w, screen)
+	}
 }
 
 // drawPlayerInitials draws the current player's initials.
@@ -76,4 +97,23 @@ func drawScore(w int, screen *ebiten.Image) {
 	// Draw the score
 	scoreString := fmt.Sprintf("%07d", theScoringState.score)
 	text.Draw(screen, scoreString, fonts.ArcadeFont16, scoreX, scoreY, color.White)
+}
+
+// drawConfirmBack draws a confirmation message for exiting.
+func drawConfirmBack(w int, screen *ebiten.Image) {
+	confirmationStringL1 := "Return to base?"
+	confirmationStringL2 := "Press back to quit."
+	confirmationStringL3 := "Press enter to resume."
+
+	confirmationYL1 := 12 * 16
+	confirmationXL1 := (w - len(confirmationStringL1)*16) / 2
+	confirmationYL2 := 14 * 16
+	confirmationXL2 := (w - len(confirmationStringL2)*16) / 2
+	confirmationYL3 := 16 * 16
+	confirmationXL3 := (w - len(confirmationStringL3)*16) / 2
+
+	// Draw the confirmation message
+	text.Draw(screen, confirmationStringL1, fonts.ArcadeFont16, confirmationXL1, confirmationYL1, color.White)
+	text.Draw(screen, confirmationStringL2, fonts.ArcadeFont16, confirmationXL2, confirmationYL2, color.White)
+	text.Draw(screen, confirmationStringL3, fonts.ArcadeFont16, confirmationXL3, confirmationYL3, color.White)
 }

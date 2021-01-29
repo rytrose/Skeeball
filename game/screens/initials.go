@@ -39,6 +39,7 @@ func UpdateInitials() ScreenID {
 
 	if input.Enter() {
 		if theInitialsState.selected == len(theInitialsState.initials)-1 {
+			theInitialsState.selected = 0
 			return ScreenScoring
 		}
 
@@ -101,7 +102,7 @@ func drawInitials(w int, screen *ebiten.Image) {
 	}
 }
 
-// getInitials retrieves the initials string chosen.
+// getInitials retrieves the initials chosen.
 func getInitials() []string {
 	return []string{
 		tokens[theInitialsState.initials[0]],
