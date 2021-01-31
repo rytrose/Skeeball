@@ -1,37 +1,20 @@
 package screens
 
 import (
-	"bytes"
-	"image"
 	"image/color"
 
 	// Import png decoding
 	_ "image/png"
 
-	"log"
 	"math/rand"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text"
+	"github.com/rytrose/soup-the-moon/game/animation"
 	"github.com/rytrose/soup-the-moon/game/fonts"
-	"github.com/rytrose/soup-the-moon/game/images"
 	"github.com/rytrose/soup-the-moon/game/input"
 	"github.com/rytrose/soup-the-moon/game/util"
 )
-
-// starburstImage is the loaded startburst sprite PNG.
-var starburstImage *ebiten.Image
-
-func init() {
-	// Read image from byte slice
-	img, _, err := image.Decode(bytes.NewReader(images.Starburst_png))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Populate image
-	starburstImage = ebiten.NewImageFromImage(img)
-}
 
 // MenuOption is a string name of an option.
 type MenuOption string
@@ -53,12 +36,12 @@ type menuState struct {
 	selected int
 	nextStar int
 	numStars int
-	stars    map[int]*Star
+	stars    map[int]*animation.Star
 }
 
 // theMenuState is the state of the menu screen.
 var theMenuState = &menuState{
-	stars: map[int]*Star{},
+	stars: map[int]*animation.Star{},
 }
 
 // Star constants
@@ -66,49 +49,7 @@ const (
 	starMaxSpawnLength = 30
 	starMinDuration    = 2
 	starMaxDuration    = 10
-	starNumFrames      = 9
-	starW              = 32
-	starH              = 32
 )
-
-// Star maintains state for a starburst animation.
-type Star struct {
-	id        int
-	x         int
-	y         int
-	speed     int
-	speedCtr  int
-	frame     int
-	direction bool
-}
-
-// Draw draws a star to the screen.
-func (s *Star) Draw(w, h int, screen *ebiten.Image) {
-	// Star is done animating
-	if s.frame < 0 || s.frame == starNumFrames {
-		delete(theMenuState.stars, s.id)
-		return
-	}
-
-	// Draw star animation frame
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(s.x), float64(s.y))
-	sx, sy := s.frame*starW, 0
-	screen.DrawImage(starburstImage.SubImage(image.Rect(sx, sy, sx+starW, sy+starH)).(*ebiten.Image), op)
-
-	// Progress the animation after the frame has been shown enough
-	if s.speedCtr == s.speed {
-		if s.direction {
-			s.frame++
-		} else {
-			s.frame--
-		}
-		s.speedCtr = 0
-	}
-
-	// Increment speed counter
-	s.speedCtr++
-}
 
 // UpdateMenu updates menu screen state before every frame.
 func UpdateMenu() ScreenID {
@@ -173,23 +114,27 @@ func drawStars(c int, w, h int, screen *ebiten.Image) {
 		theMenuState.nextStar = rand.Intn(starMaxSpawnLength) + 1
 
 		// Create the new star
-		newStar := &Star{
-			id:        theMenuState.numStars,
-			x:         rand.Intn(w),
-			y:         rand.Intn(h),
-			speed:     rand.Intn(starMaxDuration) + starMinDuration,
-			frame:     rand.Intn(starNumFrames),
-			direction: rand.Intn(2) == 1,
-		}
+		newStar := animation.NewStar(
+			theMenuState.numStars, // Monotonically increasing ID number
+			rand.Intn(w),          // Randomly place the star on the x-axis
+			rand.Intn(h),          // Randomly place the star on the y-axis
+			rand.Intn(starMaxDuration)+starMinDuration, // Vary the speed
+			rand.Intn(animation.StarNumFrames),         // Vary the starting frame
+			rand.Intn(2) == 1,                          // Vary the direction of the animation
+		)
 		theMenuState.numStars++
 
 		// Set the new star to state
-		theMenuState.stars[newStar.id] = newStar
+		theMenuState.stars[newStar.ID] = newStar
 	}
 
 	// Draw stars
 	for _, star := range theMenuState.stars {
-		star.Draw(w, h, screen)
+		done := star.Draw(w, h, screen)
+		if done {
+			// Remove star when done animating
+			delete(theMenuState.stars, star.ID)
+		}
 	}
 
 	// Decrement the next star counter
