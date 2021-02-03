@@ -34,6 +34,9 @@ func Run() {
 		// Set fullscreen
 		ebiten.SetFullscreen(true)
 
+		// Hide cursor
+		ebiten.SetCursorMode(ebiten.CursorModeHidden)
+
 		// TODO: Setup RPIO button input
 	}
 
