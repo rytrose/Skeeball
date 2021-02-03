@@ -31,6 +31,9 @@ func Run() {
 	ebiten.SetWindowTitle("Soup The Moon")
 
 	if util.IsRasPi() {
+		// Set fullscreen
+		ebiten.SetFullscreen(true)
+
 		// TODO: Setup RPIO button input
 	}
 
