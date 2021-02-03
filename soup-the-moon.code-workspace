@@ -7,13 +7,13 @@
 	"settings": {
 		"sync-rsync.sites": [
 			{
-				"localPath": "./",
+				"localPath": "/Users/rytrose/projects/soup-the-moon/",
 				"remotePath": "pi@rytrose-pi-4.local:/home/pi/projects/soup-the-moon/"
-			},
-			{
-				"localPath": "./",
-				"remotePath": "pi@rytrose-pi-zero-w.local:/home/pi/projects/soup-the-moon/"
 			}
+			// {
+			// 	"localPath": "/Users/rytrose/projects/soup-the-moon/",
+			// 	"remotePath": "pi@rytrose-pi-zero-w.local:/home/pi/projects/soup-the-moon/"
+			// }
 		],
 		"sync-rsync.exclude": [
 			".git/",

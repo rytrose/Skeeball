@@ -29,7 +29,7 @@ func (s *rpioButtonState) update() {
 		s.prevButtonDurations[pin] = s.buttonDurations[pin]
 
 		// Read pin and update duration
-		if rpio.ReadPin(pin) == rpio.High {
+		if rpio.ReadPin(pin) == rpio.Low {
 			s.buttonDurations[pin]++
 		} else {
 			s.buttonDurations[pin] = 0
@@ -43,7 +43,7 @@ func RPIOButtonUpdate() {
 }
 
 // RegisterPin configures a pin to be read on game update loop.
-// Assumes buttons are configured such that a pressed button reads as rpio.High.
+// Assumes buttons are configured such that a pressed button reads as rpio.Low.
 func RegisterPin(pin rpio.Pin) {
 	theRPIOButtonState.m.Lock()
 	defer theRPIOButtonState.m.Unlock()
