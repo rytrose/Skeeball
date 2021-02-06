@@ -11,6 +11,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text"
 	"github.com/rytrose/soup-the-moon/game/animation"
+	"github.com/rytrose/soup-the-moon/game/audio"
 	"github.com/rytrose/soup-the-moon/game/fonts"
 	"github.com/rytrose/soup-the-moon/game/input"
 	"github.com/rytrose/soup-the-moon/game/util"
@@ -33,10 +34,11 @@ var options = []MenuOption{
 
 // menuState maintains all state needed for the menu screen.
 type menuState struct {
-	selected int
-	nextStar int
-	numStars int
-	stars    map[int]*animation.Star
+	playingTheme bool
+	selected     int
+	nextStar     int
+	numStars     int
+	stars        map[int]*animation.Star
 }
 
 // theMenuState is the state of the menu screen.
@@ -53,6 +55,13 @@ const (
 
 // UpdateMenu updates menu screen state before every frame.
 func UpdateMenu() ScreenID {
+	// Play theme music
+	if !theMenuState.playingTheme {
+		audio.ThemePlayer.Rewind()
+		audio.ThemePlayer.Play()
+		theMenuState.playingTheme = true
+	}
+
 	// Scroll down menu
 	if input.Down() {
 		theMenuState.selected = util.Mod(theMenuState.selected+1, len(options))
@@ -65,6 +74,10 @@ func UpdateMenu() ScreenID {
 
 	// Select option
 	if input.Enter() {
+		// Stop theme music before leaving page
+		audio.ThemePlayer.Pause()
+		theMenuState.playingTheme = false
+
 		selectedOption := options[theMenuState.selected]
 		switch selectedOption {
 		case NewGame:
