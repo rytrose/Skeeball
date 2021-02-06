@@ -84,26 +84,29 @@ func DrawMenu(count int, w, h int, screen *ebiten.Image) {
 
 // drawTitle draws the title to the top of the screen.
 func drawTitle(w int, screen *ebiten.Image) {
-	title := "Shoot the Moon"
+	title1 := "Shoot"
+	title2 := "the Moon"
 
 	// Draw the title centered
-	titleX := (w - len(title)*32) / 2
-	text.Draw(screen, title, fonts.ArcadeFont32, titleX, 4*16, color.White)
+	title1X := (w - len(title1)*64) / 2
+	title2X := (w - len(title2)*64) / 2
+	text.Draw(screen, title1, fonts.ArcadeFont64, title1X, 6*16, color.White)
+	text.Draw(screen, title2, fonts.ArcadeFont64, title2X, 12*16, color.White)
 }
 
 // drawOptions draws the menu options.
 func drawOptions(w int, screen *ebiten.Image) {
-	startingY := 8 * 16
-	startingX := w / 4
-	tab := 32
+	startingY := 20 * 16
+	startingX := w / 6
+	tab := 64
 
 	// Draw all options
 	for i, option := range options {
-		text.Draw(screen, string(option), fonts.ArcadeFont16, startingX+tab, startingY+i*32, color.White)
+		text.Draw(screen, string(option), fonts.ArcadeFont32, startingX+tab, startingY+i*64, color.White)
 	}
 
 	// Draw cursor
-	text.Draw(screen, ">", fonts.ArcadeFont16, startingX, startingY+theMenuState.selected*32, color.White)
+	text.Draw(screen, ">", fonts.ArcadeFont32, startingX, startingY+theMenuState.selected*64, color.White)
 }
 
 // drawStars draws random starbursts in the background.

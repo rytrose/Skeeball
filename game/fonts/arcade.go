@@ -9,6 +9,7 @@ import (
 
 // Arcade font in various sizes.
 var (
+	ArcadeFont64 font.Face
 	ArcadeFont32 font.Face
 	ArcadeFont16 font.Face
 )
@@ -19,6 +20,16 @@ const dpi = 72
 func init() {
 	// Loads the arcade font file
 	arcadeTT, err := opentype.Parse(PressStart2PRegular)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Loads the arcade font face size 64 point
+	ArcadeFont64, err = opentype.NewFace(arcadeTT, &opentype.FaceOptions{
+		Size:    64,
+		DPI:     dpi,
+		Hinting: font.HintingFull,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}

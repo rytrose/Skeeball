@@ -70,34 +70,38 @@ func DrawInitials(count int, w, h int, screen *ebiten.Image) {
 
 // drawPrompt draws the input prompt to the top of the screen.
 func drawPrompt(w int, screen *ebiten.Image) {
-	prompt := "Enter your initials..."
-	promptY := 4 * 16
+	prompt1 := "Enter your"
+	prompt2 := "initials..."
+	prompt1Y := 3 * 32
+	prompt2Y := 5 * 32
 
 	// Draw the title centered
-	promptX := (w - len(prompt)*16) / 2
-	text.Draw(screen, prompt, fonts.ArcadeFont16, promptX, promptY, color.White)
+	prompt1X := (w - len(prompt1)*32) / 2
+	prompt2X := (w - len(prompt2)*32) / 2
+	text.Draw(screen, prompt1, fonts.ArcadeFont32, prompt1X, prompt1Y, color.White)
+	text.Draw(screen, prompt2, fonts.ArcadeFont32, prompt2X, prompt2Y, color.White)
 }
 
 // drawInitials draws the initials selectors.
 func drawInitials(w int, screen *ebiten.Image) {
-	topCursorY := 8 * 16
-	bottomCursorY := 12 * 16
-	initialsY := 10 * 16
+	topCursorY := (9 * 32) - 16
+	bottomCursorY := (11 * 32) + 16
+	initialsY := 10 * 32
 	initialsX := []int{
-		(3 * (w - 16)) / 8,
-		(w - 16) / 2,
-		(5 * (w - 16)) / 8,
+		(3 * (w - 32)) / 8,
+		(w - 32) / 2,
+		(5 * (w - 32)) / 8,
 	}
 
 	// Draw the initials
 	for i, initial := range theInitialsState.initials {
 		// Draw initial
-		text.Draw(screen, tokens[initial], fonts.ArcadeFont16, initialsX[i], initialsY, color.White)
+		text.Draw(screen, tokens[initial], fonts.ArcadeFont32, initialsX[i], initialsY, color.White)
 
 		if i == theInitialsState.selected {
 			// Draw the cursors
-			text.Draw(screen, "/\\", fonts.ArcadeFont16, initialsX[i]-8, topCursorY, color.White)
-			text.Draw(screen, "\\/", fonts.ArcadeFont16, initialsX[i]-8, bottomCursorY, color.White)
+			text.Draw(screen, "/\\", fonts.ArcadeFont32, initialsX[i]-16, topCursorY, color.White)
+			text.Draw(screen, "\\/", fonts.ArcadeFont32, initialsX[i]-16, bottomCursorY, color.White)
 		}
 	}
 }

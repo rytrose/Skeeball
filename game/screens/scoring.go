@@ -81,39 +81,43 @@ func DrawScoring(count int, w, h int, screen *ebiten.Image) {
 
 // drawPlayerInitials draws the current player's initials.
 func drawPlayerInitials(screen *ebiten.Image) {
-	initialsY := 4 * 16
-	initialsX := 4 * 14
+	initialsY := 2 * 32
+	initialsX := 32
 
 	// Draw the intials space delimited
 	initialsString := strings.Join(getInitials(), " ")
-	text.Draw(screen, initialsString, fonts.ArcadeFont16, initialsX, initialsY, color.White)
+	text.Draw(screen, initialsString, fonts.ArcadeFont32, initialsX, initialsY, color.White)
 }
 
 // drawScore draws the current player's score.
 func drawScore(w int, screen *ebiten.Image) {
-	scoreY := 4 * 16
-	scoreX := w - (11 * 16)
+	scoreY := 2 * 32
+	scoreX := w - (7 * 32) - 32
 
 	// Draw the score
 	scoreString := fmt.Sprintf("%07d", theScoringState.score)
-	text.Draw(screen, scoreString, fonts.ArcadeFont16, scoreX, scoreY, color.White)
+	text.Draw(screen, scoreString, fonts.ArcadeFont32, scoreX, scoreY, color.White)
 }
 
 // drawConfirmBack draws a confirmation message for exiting.
 func drawConfirmBack(w int, screen *ebiten.Image) {
 	confirmationStringL1 := "Return to base?"
 	confirmationStringL2 := "Press back to quit."
-	confirmationStringL3 := "Press enter to resume."
+	confirmationStringL3 := "Press enter"
+	confirmationStringL4 := "to resume."
 
 	confirmationYL1 := 12 * 16
-	confirmationXL1 := (w - len(confirmationStringL1)*16) / 2
-	confirmationYL2 := 14 * 16
-	confirmationXL2 := (w - len(confirmationStringL2)*16) / 2
-	confirmationYL3 := 16 * 16
-	confirmationXL3 := (w - len(confirmationStringL3)*16) / 2
+	confirmationXL1 := (w - len(confirmationStringL1)*32) / 2
+	confirmationYL2 := 16 * 16
+	confirmationXL2 := (w - len(confirmationStringL2)*32) / 2
+	confirmationYL3 := 20 * 16
+	confirmationXL3 := (w - len(confirmationStringL3)*32) / 2
+	confirmationYL4 := 23 * 16
+	confirmationXL4 := (w - len(confirmationStringL4)*32) / 2
 
 	// Draw the confirmation message
-	text.Draw(screen, confirmationStringL1, fonts.ArcadeFont16, confirmationXL1, confirmationYL1, color.White)
-	text.Draw(screen, confirmationStringL2, fonts.ArcadeFont16, confirmationXL2, confirmationYL2, color.White)
-	text.Draw(screen, confirmationStringL3, fonts.ArcadeFont16, confirmationXL3, confirmationYL3, color.White)
+	text.Draw(screen, confirmationStringL1, fonts.ArcadeFont32, confirmationXL1, confirmationYL1, color.White)
+	text.Draw(screen, confirmationStringL2, fonts.ArcadeFont32, confirmationXL2, confirmationYL2, color.White)
+	text.Draw(screen, confirmationStringL3, fonts.ArcadeFont32, confirmationXL3, confirmationYL3, color.White)
+	text.Draw(screen, confirmationStringL4, fonts.ArcadeFont32, confirmationXL4, confirmationYL4, color.White)
 }
