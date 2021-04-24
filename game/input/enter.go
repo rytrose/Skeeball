@@ -8,7 +8,7 @@ import (
 )
 
 // enterButtonPin is the raspberry pi GPIO pin number for the enter button.
-const enterButtonPin = 5
+const enterButtonPin = 18
 
 // enterPin is the pin for the enter button.
 var enterPin rpio.Pin

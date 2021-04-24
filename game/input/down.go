@@ -8,7 +8,7 @@ import (
 )
 
 // downButtonPin is the raspberry pi GPIO pin number for the down button.
-const downButtonPin = 4
+const downButtonPin = 23
 
 // downPin is the pin for the down button.
 var downPin rpio.Pin

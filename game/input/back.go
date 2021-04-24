@@ -8,7 +8,7 @@ import (
 )
 
 // backButtonPin is the raspberry pi GPIO pin number for the back button.
-const backButtonPin = 6
+const backButtonPin = 25
 
 // backPin is the pin for the back button.
 var backPin rpio.Pin

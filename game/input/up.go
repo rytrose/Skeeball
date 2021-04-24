@@ -8,7 +8,7 @@ import (
 )
 
 // upButtonPin is the raspberry pi GPIO pin number for the up button.
-const upButtonPin = 3
+const upButtonPin = 24
 
 // upPin is the pin for the up button.
 var upPin rpio.Pin

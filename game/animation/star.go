@@ -63,6 +63,7 @@ func (s *Star) Draw(w, h int, screen *ebiten.Image) bool {
 
 	// Draw star animation frame
 	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Scale(3, 3)
 	op.GeoM.Translate(float64(s.x), float64(s.y))
 	sx, sy := s.frame*StarW, 0
 	screen.DrawImage(starburstImage.SubImage(image.Rect(sx, sy, sx+StarW, sy+StarH)).(*ebiten.Image), op)
