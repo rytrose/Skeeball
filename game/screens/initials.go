@@ -7,6 +7,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/text"
 	"github.com/rytrose/soup-the-moon/game/fonts"
 	"github.com/rytrose/soup-the-moon/game/input"
+	"github.com/rytrose/soup-the-moon/game/state"
 	"github.com/rytrose/soup-the-moon/game/util"
 )
 
@@ -16,13 +17,10 @@ var tokens = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"
 // initialsState maintains all state needed for the initials input screen.
 type initialsState struct {
 	selected int
-	initials []int
 }
 
 // theInitialsState is the state of the initials input screen.
-var theInitialsState = &initialsState{
-	initials: make([]int, 3),
-}
+var theInitialsState = &initialsState{}
 
 // UpdateInitials updates initials input screen state before every frame.
 func UpdateInitials() ScreenID {
@@ -38,7 +36,7 @@ func UpdateInitials() ScreenID {
 	}
 
 	if input.Enter() {
-		if theInitialsState.selected == len(theInitialsState.initials)-1 {
+		if theInitialsState.selected == len(state.Global.CurrentInitials)-1 {
 			theInitialsState.selected = 0
 			return ScreenScoring
 		}
@@ -51,12 +49,14 @@ func UpdateInitials() ScreenID {
 
 	if input.Up() {
 		// Change token
-		theInitialsState.initials[theInitialsState.selected] = util.Mod(theInitialsState.initials[theInitialsState.selected]-1, len(tokens))
+		state.Global.CurrentInitials[theInitialsState.selected] = util.Mod(state.Global.CurrentInitials[theInitialsState.selected]-1, len(tokens))
+		state.Save()
 	}
 
 	if input.Down() {
 		// Change token
-		theInitialsState.initials[theInitialsState.selected] = util.Mod(theInitialsState.initials[theInitialsState.selected]+1, len(tokens))
+		state.Global.CurrentInitials[theInitialsState.selected] = util.Mod(state.Global.CurrentInitials[theInitialsState.selected]+1, len(tokens))
+		state.Save()
 	}
 
 	return ScreenInitials
@@ -94,7 +94,7 @@ func drawInitialsInitials(w int, screen *ebiten.Image) {
 	}
 
 	// Draw the initials
-	for i, initial := range theInitialsState.initials {
+	for i, initial := range state.Global.CurrentInitials {
 		// Draw initial
 		text.Draw(screen, tokens[initial], fonts.ArcadeFont32, initialsX[i], initialsY, color.White)
 
@@ -109,8 +109,8 @@ func drawInitialsInitials(w int, screen *ebiten.Image) {
 // getInitials retrieves the initials chosen.
 func getInitials() []string {
 	return []string{
-		tokens[theInitialsState.initials[0]],
-		tokens[theInitialsState.initials[1]],
-		tokens[theInitialsState.initials[2]],
+		tokens[state.Global.CurrentInitials[0]],
+		tokens[state.Global.CurrentInitials[1]],
+		tokens[state.Global.CurrentInitials[2]],
 	}
 }
