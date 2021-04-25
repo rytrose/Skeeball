@@ -48,9 +48,9 @@ var theMenuState = &menuState{
 
 // Star constants
 const (
-	starMaxSpawnLength = 30
-	starMinDuration    = 2
-	starMaxDuration    = 10
+	menuStarMaxSpawnLength = 30
+	menuStarMinDuration    = 2
+	menuStarMaxDuration    = 10
 )
 
 // UpdateMenu updates menu screen state before every frame.
@@ -90,13 +90,13 @@ func UpdateMenu() ScreenID {
 
 // DrawMenu draws one frame of the menu screen.
 func DrawMenu(count uint64, w, h int, screen *ebiten.Image) {
-	drawTitle(w, screen)
-	drawOptions(w, screen)
-	drawStars(w, h, screen)
+	drawMenuTitle(w, screen)
+	drawMenuOptions(w, screen)
+	drawMenuStars(w, h, screen)
 }
 
-// drawTitle draws the title to the top of the screen.
-func drawTitle(w int, screen *ebiten.Image) {
+// drawMenuTitle draws the title to the top of the screen.
+func drawMenuTitle(w int, screen *ebiten.Image) {
 	title1 := "Shoot"
 	title2 := "the Moon"
 
@@ -107,8 +107,8 @@ func drawTitle(w int, screen *ebiten.Image) {
 	text.Draw(screen, title2, fonts.ArcadeFont64, title2X, 12*16, color.White)
 }
 
-// drawOptions draws the menu options.
-func drawOptions(w int, screen *ebiten.Image) {
+// drawMenuOptions draws the menu options.
+func drawMenuOptions(w int, screen *ebiten.Image) {
 	startingY := 20 * 16
 	startingX := w / 6
 	tab := 64
@@ -122,21 +122,22 @@ func drawOptions(w int, screen *ebiten.Image) {
 	text.Draw(screen, ">", fonts.ArcadeFont32, startingX, startingY+theMenuState.selected*64, color.White)
 }
 
-// drawStars draws random starbursts in the background.
-func drawStars(w, h int, screen *ebiten.Image) {
+// drawMenuStars draws random starbursts in the background.
+func drawMenuStars(w, h int, screen *ebiten.Image) {
 	// Spawn a new star if we've waited long enough
 	if theMenuState.nextStar == 0 {
 		// Set a duration to wait before drawing the next new star
-		theMenuState.nextStar = rand.Intn(starMaxSpawnLength) + 1
+		theMenuState.nextStar = rand.Intn(menuStarMaxSpawnLength) + 1
 
 		// Create the new star
 		newStar := animation.NewStar(
 			theMenuState.numStars, // Monotonically increasing ID number
 			rand.Intn(w),          // Randomly place the star on the x-axis
 			rand.Intn(h),          // Randomly place the star on the y-axis
-			rand.Intn(starMaxDuration)+starMinDuration, // Vary the speed
-			rand.Intn(animation.StarNumFrames),         // Vary the starting frame
-			rand.Intn(2) == 1,                          // Vary the direction of the animation
+			rand.Intn(menuStarMaxDuration)+menuStarMinDuration, // Vary the speed
+			rand.Intn(animation.StarNumFrames),                 // Vary the starting frame
+			rand.Intn(2) == 1,                                  // Vary the direction of the animation
+			1+rand.Float64()*3,                                 // Set the scaling factor of the star
 		)
 		theMenuState.numStars++
 

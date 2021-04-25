@@ -39,10 +39,11 @@ type Star struct {
 	speedCtr  int
 	frame     int
 	direction bool
+	scale     float64
 }
 
 // NewStar is a Star factory.
-func NewStar(id int, x int, y int, speed int, frame int, direction bool) *Star {
+func NewStar(id int, x int, y int, speed int, frame int, direction bool, scale float64) *Star {
 	return &Star{
 		ID:        id,
 		x:         x,
@@ -50,6 +51,7 @@ func NewStar(id int, x int, y int, speed int, frame int, direction bool) *Star {
 		speed:     speed,
 		frame:     frame,
 		direction: direction,
+		scale:     scale,
 	}
 }
 
@@ -63,7 +65,7 @@ func (s *Star) Draw(w, h int, screen *ebiten.Image) bool {
 
 	// Draw star animation frame
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Scale(3, 3)
+	op.GeoM.Scale(s.scale, s.scale)
 	op.GeoM.Translate(float64(s.x), float64(s.y))
 	sx, sy := s.frame*StarW, 0
 	screen.DrawImage(starburstImage.SubImage(image.Rect(sx, sy, sx+StarW, sy+StarH)).(*ebiten.Image), op)

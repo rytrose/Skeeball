@@ -64,12 +64,12 @@ func UpdateInitials() ScreenID {
 
 // DrawInitials draws one frame of the initials input screen.
 func DrawInitials(count uint64, w, h int, screen *ebiten.Image) {
-	drawPrompt(w, screen)
-	drawInitials(w, screen)
+	drawInitialsPrompt(w, screen)
+	drawInitialsInitials(w, screen)
 }
 
-// drawPrompt draws the input prompt to the top of the screen.
-func drawPrompt(w int, screen *ebiten.Image) {
+// drawInitialsPrompt draws the input prompt to the top of the screen.
+func drawInitialsPrompt(w int, screen *ebiten.Image) {
 	prompt1 := "Enter your"
 	prompt2 := "initials..."
 	prompt1Y := 3 * 32
@@ -82,8 +82,8 @@ func drawPrompt(w int, screen *ebiten.Image) {
 	text.Draw(screen, prompt2, fonts.ArcadeFont32, prompt2X, prompt2Y, color.White)
 }
 
-// drawInitials draws the initials selectors.
-func drawInitials(w int, screen *ebiten.Image) {
+// drawInitialsInitials draws the initials selectors.
+func drawInitialsInitials(w int, screen *ebiten.Image) {
 	topCursorY := (9 * 32) - 16
 	bottomCursorY := (11 * 32) + 16
 	initialsY := 10 * 32

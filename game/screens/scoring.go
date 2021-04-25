@@ -6,6 +6,7 @@ import (
 	"image"
 	"image/color"
 	"log"
+	"math/rand"
 	"strings"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -61,10 +62,22 @@ type scoringState struct {
 	confirmingBack bool
 	planetImage    *ebiten.Image
 	animatedText   *animation.TextScale
+	nextStar       int
+	numStars       int
+	stars          map[int]*animation.Star
 }
 
 // theScoringState is the state of the scoring screen.
-var theScoringState = &scoringState{}
+var theScoringState = &scoringState{
+	stars: map[int]*animation.Star{},
+}
+
+// Star constants
+const (
+	scoringStarMaxSpawnLength = 60
+	scoringStarMinDuration    = 2
+	scoringStarMaxDuration    = 8
+)
 
 // UpdateScoring updates the scoring screen state before every frame.
 func UpdateScoring(w, h int) ScreenID {
@@ -137,17 +150,18 @@ func UpdateScoring(w, h int) ScreenID {
 
 // DrawScoring draws one frame of the scoring screen.
 func DrawScoring(count uint64, w, h int, screen *ebiten.Image) {
-	drawPlayerInitials(screen)
-	drawScore(w, screen)
-	drawPlanetAnimation(w, h, screen)
+	drawScoringStars(w, h, screen)
+	drawScoringPlayerInitials(screen)
+	drawScoringScore(w, screen)
+	drawScoringPlanetAnimation(w, h, screen)
 
 	if theScoringState.confirmingBack {
-		drawConfirmBack(w, screen)
+		drawScoringConfirmBack(w, screen)
 	}
 }
 
-// drawPlayerInitials draws the current player's initials.
-func drawPlayerInitials(screen *ebiten.Image) {
+// drawScoringPlayerInitials draws the current player's initials.
+func drawScoringPlayerInitials(screen *ebiten.Image) {
 	initialsY := 2 * 32
 	initialsX := 32
 
@@ -156,8 +170,8 @@ func drawPlayerInitials(screen *ebiten.Image) {
 	text.Draw(screen, initialsString, fonts.ArcadeFont32, initialsX, initialsY, color.White)
 }
 
-// drawScore draws the current player's score.
-func drawScore(w int, screen *ebiten.Image) {
+// drawScoringScore draws the current player's score.
+func drawScoringScore(w int, screen *ebiten.Image) {
 	scoreY := 2 * 32
 	scoreX := w - (7 * 32) - 32
 
@@ -166,8 +180,8 @@ func drawScore(w int, screen *ebiten.Image) {
 	text.Draw(screen, scoreString, fonts.ArcadeFont32, scoreX, scoreY, color.White)
 }
 
-// drawConfirmBack draws a confirmation message for exiting.
-func drawConfirmBack(w int, screen *ebiten.Image) {
+// drawScoringConfirmBack draws a confirmation message for exiting.
+func drawScoringConfirmBack(w int, screen *ebiten.Image) {
 	confirmationStringL1 := "Return to base?"
 	confirmationStringL2 := "Press back to quit."
 	confirmationStringL3 := "Press enter"
@@ -189,8 +203,8 @@ func drawConfirmBack(w int, screen *ebiten.Image) {
 	text.Draw(screen, confirmationStringL4, fonts.ArcadeFont32, confirmationXL4, confirmationYL4, color.White)
 }
 
-// drawPlanetAnimation draws a planet image a text animation, if necessary.
-func drawPlanetAnimation(w, h int, screen *ebiten.Image) {
+// drawScoringPlanetAnimation draws a planet image a text animation, if necessary.
+func drawScoringPlanetAnimation(w, h int, screen *ebiten.Image) {
 	if theScoringState.planetImage != nil && theScoringState.animatedText != nil {
 		op := &ebiten.DrawImageOptions{}
 		op.GeoM.Translate(float64(w)/2-float64(planetImageWidth)/2, float64(h)/5)
@@ -201,4 +215,40 @@ func drawPlanetAnimation(w, h int, screen *ebiten.Image) {
 			theScoringState.animatedText = nil
 		}
 	}
+}
+
+// drawScoringStars draws random starbursts in the background.
+func drawScoringStars(w, h int, screen *ebiten.Image) {
+	// Spawn a new star if we've waited long enough
+	if theScoringState.nextStar == 0 {
+		// Set a duration to wait before drawing the next new star
+		theScoringState.nextStar = rand.Intn(scoringStarMaxSpawnLength) + 1
+
+		// Create the new star
+		newStar := animation.NewStar(
+			theScoringState.numStars, // Monotonically increasing ID number
+			rand.Intn(w),             // Randomly place the star on the x-axis
+			rand.Intn(h),             // Randomly place the star on the y-axis
+			rand.Intn(scoringStarMaxDuration)+scoringStarMinDuration, // Vary the speed
+			rand.Intn(animation.StarNumFrames),                       // Vary the starting frame
+			rand.Intn(2) == 1,                                        // Vary the direction of the animation
+			1+rand.Float64()*2,                                       // Set the scaling factor of the star
+		)
+		theScoringState.numStars++
+
+		// Set the new star to state
+		theScoringState.stars[newStar.ID] = newStar
+	}
+
+	// Draw stars
+	for _, star := range theScoringState.stars {
+		done := star.Draw(w, h, screen)
+		if done {
+			// Remove star when done animating
+			delete(theScoringState.stars, star.ID)
+		}
+	}
+
+	// Decrement the next star counter
+	theScoringState.nextStar--
 }
