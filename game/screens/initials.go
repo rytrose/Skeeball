@@ -63,7 +63,7 @@ func UpdateInitials() ScreenID {
 }
 
 // DrawInitials draws one frame of the initials input screen.
-func DrawInitials(count int, w, h int, screen *ebiten.Image) {
+func DrawInitials(count uint64, w, h int, screen *ebiten.Image) {
 	drawPrompt(w, screen)
 	drawInitials(w, screen)
 }

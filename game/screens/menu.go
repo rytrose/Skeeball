@@ -89,10 +89,10 @@ func UpdateMenu() ScreenID {
 }
 
 // DrawMenu draws one frame of the menu screen.
-func DrawMenu(count int, w, h int, screen *ebiten.Image) {
+func DrawMenu(count uint64, w, h int, screen *ebiten.Image) {
 	drawTitle(w, screen)
 	drawOptions(w, screen)
-	drawStars(count, w, h, screen)
+	drawStars(w, h, screen)
 }
 
 // drawTitle draws the title to the top of the screen.
@@ -123,7 +123,7 @@ func drawOptions(w int, screen *ebiten.Image) {
 }
 
 // drawStars draws random starbursts in the background.
-func drawStars(c int, w, h int, screen *ebiten.Image) {
+func drawStars(w, h int, screen *ebiten.Image) {
 	// Spawn a new star if we've waited long enough
 	if theMenuState.nextStar == 0 {
 		// Set a duration to wait before drawing the next new star

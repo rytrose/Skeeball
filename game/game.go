@@ -17,7 +17,7 @@ import (
 type Game struct {
 	w      int              // Screen size width.
 	h      int              // Screen size height.
-	c      int              // Frame counter
+	c      uint64           // Frame counter
 	screen screens.ScreenID // An enumeration of the current screen being displayed.
 }
 
@@ -72,7 +72,7 @@ func (g *Game) Update() error {
 	case screens.ScreenInitials:
 		nextScreen = screens.UpdateInitials()
 	case screens.ScreenScoring:
-		nextScreen = screens.UpdateScoring()
+		nextScreen = screens.UpdateScoring(g.w, g.h)
 	}
 
 	// Set the next screen
