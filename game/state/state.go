@@ -40,6 +40,7 @@ func load() {
 	stateFile, err := os.Open(statePath)
 	if err != nil {
 		log.Printf("unable to open stateFile: %s", err)
+		log.Println("creating new state")
 
 		// File doesn't exist or is corrupted, create new one
 		Global = &State{
