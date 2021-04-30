@@ -82,6 +82,8 @@ func UpdateMenu() ScreenID {
 		switch selectedOption {
 		case NewGame:
 			return ScreenInitials
+		case Leaderboard:
+			return ScreenLeaderboard
 		}
 	}
 

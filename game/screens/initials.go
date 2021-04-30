@@ -106,11 +106,11 @@ func drawInitialsInitials(w int, screen *ebiten.Image) {
 	}
 }
 
-// getInitials retrieves the initials chosen.
-func getInitials() []string {
+// getInitials retrieves the string initials from a list of token indices.
+func getInitials(indices []int) []string {
 	return []string{
-		tokens[state.Global.CurrentInitials[0]],
-		tokens[state.Global.CurrentInitials[1]],
-		tokens[state.Global.CurrentInitials[2]],
+		tokens[indices[0]],
+		tokens[indices[1]],
+		tokens[indices[2]],
 	}
 }

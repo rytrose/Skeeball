@@ -6,6 +6,7 @@ type ScreenID int
 // Enumeration of screens.
 const (
 	ScreenMenu ScreenID = iota
+	ScreenLeaderboard
 	ScreenInitials
 	ScreenScoring
 )

@@ -4,6 +4,7 @@ import (
 	"encoding/gob"
 	"log"
 	"os"
+	"sort"
 	"time"
 )
 
@@ -86,4 +87,18 @@ func Save() {
 
 	stateEncoder := gob.NewEncoder(stateFile)
 	stateEncoder.Encode(Global)
+}
+
+// AddLeaderboardEntry adds an entry to the leaderboard.
+func AddLeaderboardEntry(entry *LeaderboardEntry) {
+	// Add entry
+	Global.Leaderboard.Entries = append(Global.Leaderboard.Entries, entry)
+
+	// Sort entries by score
+	sort.SliceStable(Global.Leaderboard.Entries, func(i, j int) bool {
+		return Global.Leaderboard.Entries[i].Score > Global.Leaderboard.Entries[j].Score
+	})
+
+	// Save off edited state
+	Save()
 }
