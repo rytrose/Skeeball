@@ -5,6 +5,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text"
+	"github.com/rytrose/soup-the-moon/game/audio"
 	"github.com/rytrose/soup-the-moon/game/fonts"
 	"github.com/rytrose/soup-the-moon/game/input"
 	"github.com/rytrose/soup-the-moon/game/state"
@@ -16,7 +17,8 @@ var tokens = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"
 
 // initialsState maintains all state needed for the initials input screen.
 type initialsState struct {
-	selected int
+	selected     int
+	playingTheme bool
 }
 
 // theInitialsState is the state of the initials input screen.
@@ -24,8 +26,19 @@ var theInitialsState = &initialsState{}
 
 // UpdateInitials updates initials input screen state before every frame.
 func UpdateInitials() ScreenID {
+	// Play theme music
+	if !theInitialsState.playingTheme {
+		audio.InitialsThemePlayer.Rewind()
+		audio.InitialsThemePlayer.Play()
+		theInitialsState.playingTheme = true
+	}
+
 	if input.Back() {
 		if theInitialsState.selected == 0 {
+			// Stop theme music before leaving page
+			audio.InitialsThemePlayer.Pause()
+			theInitialsState.playingTheme = false
+
 			return ScreenMenu
 		}
 
@@ -38,6 +51,11 @@ func UpdateInitials() ScreenID {
 	if input.Enter() {
 		if theInitialsState.selected == len(state.Global.CurrentInitials)-1 {
 			theInitialsState.selected = 0
+
+			// Stop theme music before leaving page
+			audio.InitialsThemePlayer.Pause()
+			theInitialsState.playingTheme = false
+
 			return ScreenScoring
 		}
 

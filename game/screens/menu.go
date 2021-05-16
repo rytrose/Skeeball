@@ -57,8 +57,8 @@ const (
 func UpdateMenu() ScreenID {
 	// Play theme music
 	if !theMenuState.playingTheme {
-		audio.ThemePlayer.Rewind()
-		audio.ThemePlayer.Play()
+		audio.TitleThemePlayer.Rewind()
+		audio.TitleThemePlayer.Play()
 		theMenuState.playingTheme = true
 	}
 
@@ -75,7 +75,7 @@ func UpdateMenu() ScreenID {
 	// Select option
 	if input.Enter() {
 		// Stop theme music before leaving page
-		audio.ThemePlayer.Pause()
+		audio.TitleThemePlayer.Pause()
 		theMenuState.playingTheme = false
 
 		selectedOption := options[theMenuState.selected]
