@@ -4,11 +4,11 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/rytrose/soup-the-moon/game/util"
-	"github.com/stianeikeland/go-rpio"
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 // earthButtonPin is the raspberry pi GPIO pin number for the earth button.
-const earthButtonPin = 7
+const earthButtonPin = 27
 
 // earthPin is the pin for the earth button.
 var earthPin rpio.Pin

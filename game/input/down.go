@@ -4,11 +4,11 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/rytrose/soup-the-moon/game/util"
-	"github.com/stianeikeland/go-rpio"
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 // downButtonPin is the raspberry pi GPIO pin number for the down button.
-const downButtonPin = 23
+const downButtonPin = 18
 
 // downPin is the pin for the down button.
 var downPin rpio.Pin

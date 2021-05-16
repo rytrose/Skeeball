@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/stianeikeland/go-rpio"
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 // RPIOClient is the RPIO singleton.
@@ -108,12 +108,14 @@ func (r *rPIO) RegisterEdgeDetection(pin rpio.Pin, edge rpio.Edge, callback func
 		return fmt.Errorf("GPIO is not yet open")
 	}
 
+	if !r.polling {
+		return fmt.Errorf("not yet polling GPIO")
+	}
+
 	_, exists := r.registeredPins[pin]
 	if exists {
 		return fmt.Errorf("pin is already registered, call RemoveEdgeDetectionRegistration before attempting a new registration")
 	}
-
-	fmt.Println(fmt.Sprintf("registering pin %d, edge %v", pin, edge))
 
 	// Only one registration per pin
 	r.registeredPins[pin] = true
@@ -137,12 +139,14 @@ func (r *rPIO) RemoveEdgeDetectionRegistration(pin rpio.Pin) error {
 		return fmt.Errorf("GPIO is not yet open")
 	}
 
+	if !r.polling {
+		return fmt.Errorf("not yet polling GPIO")
+	}
+
 	_, exists := r.registeredPins[pin]
 	if !exists {
 		return fmt.Errorf("pin is not yet registered")
 	}
-
-	fmt.Println(fmt.Sprintf("removing registration for pin %d", pin))
 
 	// Remove pin registration
 	delete(r.registeredPins, pin)

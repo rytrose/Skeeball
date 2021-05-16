@@ -4,11 +4,11 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/rytrose/soup-the-moon/game/util"
-	"github.com/stianeikeland/go-rpio"
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 // upButtonPin is the raspberry pi GPIO pin number for the up button.
-const upButtonPin = 24
+const upButtonPin = 15
 
 // upPin is the pin for the up button.
 var upPin rpio.Pin

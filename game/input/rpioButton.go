@@ -3,7 +3,7 @@ package input
 import (
 	"sync"
 
-	"github.com/stianeikeland/go-rpio"
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 type rpioButtonState struct {

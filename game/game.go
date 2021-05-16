@@ -37,7 +37,17 @@ func Run() {
 		// Hide cursor
 		ebiten.SetCursorMode(ebiten.CursorModeHidden)
 
-		// TODO: Setup RPIO button input
+		// Setup RPIO button input
+		input.InitPluto()
+		input.InitSaturn()
+		input.InitJupiter()
+		input.InitMars()
+		input.InitEarth()
+		input.InitMercury()
+		input.InitUp()
+		input.InitDown()
+		input.InitEnter()
+		input.InitBack()
 	}
 
 	// Run game

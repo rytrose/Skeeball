@@ -4,11 +4,11 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/rytrose/soup-the-moon/game/util"
-	"github.com/stianeikeland/go-rpio"
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 // jupiterButtonPin is the raspberry pi GPIO pin number for the jupiter button.
-const jupiterButtonPin = 9
+const jupiterButtonPin = 4
 
 // jupiterPin is the pin for the jupiter button.
 var jupiterPin rpio.Pin

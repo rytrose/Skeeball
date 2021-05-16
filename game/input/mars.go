@@ -4,11 +4,11 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/rytrose/soup-the-moon/game/util"
-	"github.com/stianeikeland/go-rpio"
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 // marsButtonPin is the raspberry pi GPIO pin number for the mars button.
-const marsButtonPin = 8
+const marsButtonPin = 17
 
 // marsPin is the pin for the mars button.
 var marsPin rpio.Pin

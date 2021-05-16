@@ -4,11 +4,11 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/rytrose/soup-the-moon/game/util"
-	"github.com/stianeikeland/go-rpio"
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 // plutoButtonPin is the raspberry pi GPIO pin number for the pluto button.
-const plutoButtonPin = 11
+const plutoButtonPin = 2
 
 // plutoPin is the pin for the pluto button.
 var plutoPin rpio.Pin

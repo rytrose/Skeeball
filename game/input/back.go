@@ -4,11 +4,11 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/rytrose/soup-the-moon/game/util"
-	"github.com/stianeikeland/go-rpio"
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 // backButtonPin is the raspberry pi GPIO pin number for the back button.
-const backButtonPin = 25
+const backButtonPin = 23
 
 // backPin is the pin for the back button.
 var backPin rpio.Pin
